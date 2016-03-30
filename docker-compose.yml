@@ -1,0 +1,2 @@
+# This is docker-compose for local development -  developer defines what is
+# required for development (DB, another microservices, ...)

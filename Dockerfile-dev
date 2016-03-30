@@ -1,0 +1,3 @@
+# This is developer dockerfile = it will build fat docker image with debug/trace
+# tools, which can be used during development - developer has responsibility for
+# this Dockerfile
