@@ -2,6 +2,11 @@ sudo: required
 
 services:
   - docker
+
+language: go
+
+go:
+  - '1.5'  
   
 after_success:
 - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
