@@ -14,4 +14,6 @@ after_success:
 - docker build --rm=true -t $REPO:binary -f devops/Dockerfile . 
 - docker run --rm=true -ti -v $PWD:/tmp $REPO:binary cp /main /tmp
 - docker build --rm=true -t $REPO:$TRAVIS_BUILD_NUMBER .
+- docker tag -f $REPO:$TRAVIS_BUILD_NUMBER $REPO:dev 
 - docker push $REPO:$TRAVIS_BUILD_NUMBER
+- docker push $REPO:dev
