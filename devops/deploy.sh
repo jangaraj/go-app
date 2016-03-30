@@ -7,6 +7,8 @@ red='\e[0;31m'
 blue='\e[0;34m'
 endColor='\e[0m'
 
+date
+
 echo -e "${yellow}1. Creating and configuring new Kubernetes cluster - configured gcloud cli is required${endColor}"
 type gcloud >/dev/null 2>&1 || { echo -e >&2 "${red}I require gcloud but it's not installed.  Aborting.${endColor}"; exit 1; }
 
@@ -46,10 +48,25 @@ echo -e "${green}Done${endColor}"
 
 echo -e "${blue}List current pod (containers)${endColor}"
 # list pods
+sleep 10
 kubectl get po
 echo -e "${green}Done${endColor}"
 
+echo -e "${blue}Quick rolling update - to jangaraj/go-app:10${endColor}"
+# list pods
+kubectl rolling-update goapp --image=jangaraj/go-app:10 --timeout=20s --update-period=1s
+echo -e "${green}Done${endColor}"
+date
+
 echo -e "${blue}Get loadbalancer public IP${endColor}"
 # find public ip of loadbalancer node
-gcloud compute instances list | grep $(echo $nodes | awk '{print $1}') | awk '{print $5}'
-echo -e "${green}Done${endColor}"
+LB=$(echo $nodes | awk '{print $1}')
+IP=$(gcloud compute instances list | grep $(echo $nodes | awk '{print $1}') | awk '{print $5}')
+echo -e "${green}App: http://${IP}/goapp${endColor}"
+echo -e "${green}Haproxy stats: http://${IP}:1936${endColor}"
+echo -e "${green}Watch command: watch -n 0.1 curl -qs $IP/goapp${endColor}"
+echo -e "${green}Stress test: siege -c 100 -t 30S -b http://${IP}/goapp${endColor}"
+echo -e "--------------------------"
+echo -e "${green}ssh loadbalancer: gcloud compute ssh $LB${endColor}"
+echo -e "${green}apt-get update; apt-get install -y siege${endColor}"
+echo -e "${green}Stress test: siege -c 100 -t 30S -b http://127.0.0.1/goapp${endColor}"
