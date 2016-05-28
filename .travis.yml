@@ -10,6 +10,7 @@ go:
   
 after_success:
 - docker version
+- docker build -h
 - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
 - export REPO=jangaraj/go-app
 - docker build --rm=true -t $REPO:binary -f devops/Dockerfile . 
