@@ -3,7 +3,7 @@ import (
         "fmt"
         "net/http"
         "os"
-        "string"
+        "strings"
 )
 func handler(w http.ResponseWriter, r *http.Request) {
         h, _ := os.Hostname()
